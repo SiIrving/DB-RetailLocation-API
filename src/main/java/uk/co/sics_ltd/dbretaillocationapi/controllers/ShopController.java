@@ -23,7 +23,7 @@ public class ShopController {
     public ShopDetail getShop(@RequestParam("customerLongitude") Float customerLongitude,
                         @RequestParam("customerLatitude") Float customerLatitude) {
 
-        return new ShopDetail("TestShopNewcastle", 69, "NE11AD");
+        return null;
 
     }
 
