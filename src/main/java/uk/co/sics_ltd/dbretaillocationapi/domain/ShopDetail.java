@@ -1,5 +1,7 @@
 package uk.co.sics_ltd.dbretaillocationapi.domain;
 
+import uk.co.sics_ltd.dbretaillocationapi.service.Location;
+
 public class ShopDetail {
 
     private String shopName;
@@ -49,6 +51,13 @@ public class ShopDetail {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+    public double distanceTo(Location location) {
+        return Math.sqrt(
+                Math.pow((this.getLongitude() - location.getLongitude()), 2)
+                    + Math.pow((this.getLatitude() - location.getLatitude()), 2)
+        );
     }
 
     public static class Address {
