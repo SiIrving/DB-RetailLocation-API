@@ -5,6 +5,8 @@ public class ShopDetail {
     private String shopName;
 
     private Address shopAddress;
+    private double latitude;
+    private double longitude;
 
     public ShopDetail() {
 
@@ -31,6 +33,22 @@ public class ShopDetail {
 
     public void setShopAddress(Address shopAddress) {
         this.shopAddress = shopAddress;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
     public static class Address {
