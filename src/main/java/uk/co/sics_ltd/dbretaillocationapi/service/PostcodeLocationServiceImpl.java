@@ -4,15 +4,18 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import uk.co.sics_ltd.dbretaillocationapi.service.exception.UnknownPostcodeException;
 
+@Service
 public class PostcodeLocationServiceImpl implements PostcodeLocationService {
 
     private String apiKey;
 
-    public PostcodeLocationServiceImpl(String apiKey) {
+    public PostcodeLocationServiceImpl(@Value("${google.geocode.api.key}") String apiKey) {
         this.apiKey = apiKey;
     }
 

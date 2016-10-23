@@ -6,6 +6,6 @@ public interface ShopService {
 
     void createShop(ShopDetail shopDetail);
 
-    ShopDetail findNearestToPostcode(String postcode);
+    ShopDetail findNearestToLongitudeAndLatitude(Double longitude, Double latitude);
 
 }

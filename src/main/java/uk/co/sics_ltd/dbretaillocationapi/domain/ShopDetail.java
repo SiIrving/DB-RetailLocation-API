@@ -53,10 +53,10 @@ public class ShopDetail {
         this.longitude = longitude;
     }
 
-    public double distanceTo(Location location) {
+    public double distanceTo(double longitude, double latitude) {
         return Math.sqrt(
-                Math.pow((this.getLongitude() - location.getLongitude()), 2)
-                    + Math.pow((this.getLatitude() - location.getLatitude()), 2)
+                Math.pow((this.getLongitude() - longitude), 2)
+                    + Math.pow((this.getLatitude() - latitude), 2)
         );
     }
 

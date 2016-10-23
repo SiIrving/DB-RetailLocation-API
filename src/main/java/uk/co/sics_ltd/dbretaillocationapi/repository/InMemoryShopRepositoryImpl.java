@@ -1,11 +1,12 @@
 package uk.co.sics_ltd.dbretaillocationapi.repository;
 
+import org.springframework.stereotype.Repository;
 import uk.co.sics_ltd.dbretaillocationapi.domain.ShopDetail;
-import uk.co.sics_ltd.dbretaillocationapi.service.Location;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class InMemoryShopRepositoryImpl implements ShopRepository {
 
     private List<ShopDetail> shopDetails;
@@ -20,11 +21,11 @@ public class InMemoryShopRepositoryImpl implements ShopRepository {
     }
 
     @Override
-    public ShopDetail findNearestToLocation(Location location) {
+    public ShopDetail findNearestToLongitudeAndLatitude(Double longitude, Double latitude) {
         return shopDetails.stream()
                 .sorted((shopDetail1, shopDetail2)
-                            -> Double.compare(shopDetail1.distanceTo(location),
-                                                shopDetail2.distanceTo(location)))
+                            -> Double.compare(shopDetail1.distanceTo(longitude, latitude),
+                                                shopDetail2.distanceTo(longitude, latitude)))
                 .findFirst()
                 .get();
     }

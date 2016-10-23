@@ -68,15 +68,13 @@ public class ShopServiceImplTest {
 
         when(postcodeLocationService.locatePostcode(any()))
                 .thenReturn(LOCATION);
-        when(shopRepository.findNearestToLocation(any()))
+        when(shopRepository.findNearestToLongitudeAndLatitude(any(), any()))
                 .thenReturn(nearestShop);
 
 
-        assertEquals(nearestShop, classUnderTest.findNearestToPostcode(POSTCODE));
+        assertEquals(nearestShop, classUnderTest.findNearestToLongitudeAndLatitude(LONGITUDE, LATITUDE));
 
-
-        verify(postcodeLocationService).locatePostcode(POSTCODE);
-        verify(shopRepository).findNearestToLocation(LOCATION);
+        verify(shopRepository).findNearestToLongitudeAndLatitude(LONGITUDE, LATITUDE);
     }
 
     private Matcher<ShopDetail> matchesShopEnrichedWithLocation() {
