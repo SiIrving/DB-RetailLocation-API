@@ -24,17 +24,12 @@ public class InMemoryShopRepositoryImplTest {
 
     private static final ShopDetail CLOSEST_SHOP = new ShopDetail("TestShopClosest", 69, "CL053T");
 
-    private static final String POSTCODE = "POSTCODE";
-
     @Before
     public void setUp() {
 
         MockitoAnnotations.initMocks(this);
 
-        classUnderTest = new InMemoryShopRepositoryImpl(postcodeLocationService);
-
-        when(postcodeLocationService.locatePostcode(any()))
-                .thenReturn(new Location(-1.4635271, 53.3815505));
+        classUnderTest = new InMemoryShopRepositoryImpl();
 
         CLOSEST_SHOP.setLongitude(-1.6157867);
         CLOSEST_SHOP.setLatitude(54.9677216);
@@ -48,9 +43,9 @@ public class InMemoryShopRepositoryImplTest {
     }
 
     @Test
-    public void testFindClosestToPostcode() {
+    public void testFindClosestToLocation() {
 
-        ShopDetail closestShop = classUnderTest.findNearestToPostcode(POSTCODE);
+        ShopDetail closestShop = classUnderTest.findNearestToLocation(new Location(-1.4635271, 53.3815505));
 
         assertEquals(CLOSEST_SHOP.getShopName(), closestShop.getShopName());
         assertEquals(CLOSEST_SHOP.getShopAddress().getNumber(), closestShop.getShopAddress().getNumber());

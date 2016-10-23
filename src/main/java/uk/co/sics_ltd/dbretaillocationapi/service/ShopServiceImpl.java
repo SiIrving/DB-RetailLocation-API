@@ -2,16 +2,17 @@ package uk.co.sics_ltd.dbretaillocationapi.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.co.sics_ltd.dbretaillocationapi.domain.ShopDetail;
+import uk.co.sics_ltd.dbretaillocationapi.repository.ShopRepository;
 
-public class ShopCreationServiceImpl implements ShopCreationService {
+public class ShopServiceImpl implements ShopService {
 
     private PostcodeLocationService postcodeLocationService;
 
     private ShopRepository shopRepository;
 
     @Autowired
-    public ShopCreationServiceImpl(PostcodeLocationService postcodeLocatorService,
-                                   ShopRepository shopRepository) {
+    public ShopServiceImpl(PostcodeLocationService postcodeLocatorService,
+                           ShopRepository shopRepository) {
         this.postcodeLocationService = postcodeLocatorService;
         this.shopRepository = shopRepository;
     }
@@ -33,4 +34,10 @@ public class ShopCreationServiceImpl implements ShopCreationService {
 
     }
 
+    @Override
+    public ShopDetail findNearestToPostcode(String postcode) {
+        return shopRepository.findNearestToLocation(
+                postcodeLocationService.locatePostcode(postcode)
+        );
+    }
 }

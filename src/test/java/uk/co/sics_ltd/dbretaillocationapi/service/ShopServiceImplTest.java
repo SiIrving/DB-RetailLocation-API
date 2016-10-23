@@ -11,17 +11,19 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 import uk.co.sics_ltd.dbretaillocationapi.domain.ShopDetail;
+import uk.co.sics_ltd.dbretaillocationapi.repository.ShopRepository;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ShopCreationServiceImplTest {
+public class ShopServiceImplTest {
 
     @InjectMocks
-    private ShopCreationServiceImpl classUnderTest;
+    private ShopServiceImpl classUnderTest;
 
     @Mock
     private PostcodeLocationService postcodeLocationService;
@@ -39,6 +41,8 @@ public class ShopCreationServiceImplTest {
 
     private static final double LATITUDE = 51.5190259;
 
+    private static final Location LOCATION = new Location(LONGITUDE, LATITUDE);
+
     @Before
     public void setUpMocks() {
         MockitoAnnotations.initMocks(this);
@@ -48,13 +52,31 @@ public class ShopCreationServiceImplTest {
     public void shopHasValidPostcode_createShopCalled_shopCreatedWithLongitudeAndLatitudeEnriched() {
 
         when(postcodeLocationService.locatePostcode(any()))
-                .thenReturn(new Location(LONGITUDE, LATITUDE));
+                .thenReturn(LOCATION);
 
         classUnderTest.createShop(new ShopDetail(SHOP_NAME, SHOP_NUMBER, POSTCODE));
 
         verify(shopRepository).save(argThat(matchesShopEnrichedWithLocation()));
         verify(postcodeLocationService).locatePostcode(POSTCODE);
 
+    }
+
+    @Test
+    public void postcodeIsValid_findNearestToPostcode_shopRepositoryCalledWithLocationOfPostcodeAndResultReturned() {
+
+        ShopDetail nearestShop = new ShopDetail();
+
+        when(postcodeLocationService.locatePostcode(any()))
+                .thenReturn(LOCATION);
+        when(shopRepository.findNearestToLocation(any()))
+                .thenReturn(nearestShop);
+
+
+        assertEquals(nearestShop, classUnderTest.findNearestToPostcode(POSTCODE));
+
+
+        verify(postcodeLocationService).locatePostcode(POSTCODE);
+        verify(shopRepository).findNearestToLocation(LOCATION);
     }
 
     private Matcher<ShopDetail> matchesShopEnrichedWithLocation() {
