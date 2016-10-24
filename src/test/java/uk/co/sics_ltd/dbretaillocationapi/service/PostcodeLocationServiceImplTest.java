@@ -8,7 +8,7 @@ import static org.junit.Assert.assertEquals;
 public class PostcodeLocationServiceImplTest {
 
     private PostcodeLocationServiceImpl postcodeLocationServiceImpl
-            = new PostcodeLocationServiceImpl("AIzaSyDlL-VfBWt2C7hG_LwKqFTREJOXnSamVg0");
+            = new PostcodeLocationServiceImpl();
 
     @Test
     public void testLocateValidPostcode() {
