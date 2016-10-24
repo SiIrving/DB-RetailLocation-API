@@ -3,9 +3,11 @@ package uk.co.sics_ltd.dbretaillocationapi.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uk.co.sics_ltd.dbretaillocationapi.domain.ShopDetail;
 import uk.co.sics_ltd.dbretaillocationapi.service.ShopService;
+import uk.co.sics_ltd.dbretaillocationapi.service.exception.UnknownPostcodeException;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -36,6 +38,15 @@ public class ShopController {
         return shopService.findNearestToLongitudeAndLatitude(customerLongitude, customerLatitude);
 
     }
+
+    @ExceptionHandler(UnknownPostcodeException.class)
+    public ResponseEntity<ErrorResponse> exceptionHandler(UnknownPostcodeException ex) {
+        ErrorResponse error = new ErrorResponse(String.format(
+                "Postcode %s not found", ex.getPostcode()
+        ));
+        return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
+    }
+
 
 
 }

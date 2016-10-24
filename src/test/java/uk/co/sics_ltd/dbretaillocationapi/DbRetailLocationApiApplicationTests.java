@@ -29,18 +29,18 @@ public class DbRetailLocationApiApplicationTests {
                 .port(port)
                 .contentType("application/json")
                 .body(shopDetailNewcastle)
-                .when()
+       .when()
                 .post("/shop")
-                .then()
+       .then()
                 .statusCode(201);
 
         given()
                 .port(port)
                 .contentType("application/json")
                 .body(shopDetailLondon)
-                .when()
+       .when()
                 .post("/shop")
-                .then()
+       .then()
                 .statusCode(201);
 
     }
@@ -48,14 +48,36 @@ public class DbRetailLocationApiApplicationTests {
     @Test
     public void testRetrieveShopDetail() {
         given()
-               .port(port)
-        .when()
-               .get("/shop?customerLongitude=-1.4635271&customerLatitude=53.3815505")
-               .then()
-               .statusCode(200)
-               .body("shopName", equalTo("TestShopNewcastle"),
+                .port(port)
+       .when()
+                .get("/shop?customerLongitude=-1.4635271&customerLatitude=53.3815505")
+       .then()
+                .statusCode(200)
+                .body("shopName", equalTo("TestShopNewcastle"),
                         "shopAddress.number", equalTo(69),
                         "shopAddress.postcode", equalTo("NE11AD")
+                );
+
+    }
+
+    @Test
+    public void testSaveShopDetailForBadPostcode() {
+
+        String badPostcode = "NE11AA";
+
+        ShopDetail shopDetailPostcodeNotFound = new ShopDetail("TestShopNewcastle", 69, badPostcode);
+
+        given()
+                .port(port)
+                .contentType("application/json")
+                .body(shopDetailPostcodeNotFound)
+       .when()
+                .post("/shop")
+       .then()
+                .statusCode(400)
+                .body("errorMessage", equalTo(String.format(
+                        "Postcode %s not found", "NE11AA"
+                    ))
                 );
 
     }
