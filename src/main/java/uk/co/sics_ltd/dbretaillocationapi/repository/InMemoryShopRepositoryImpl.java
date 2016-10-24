@@ -5,6 +5,7 @@ import uk.co.sics_ltd.dbretaillocationapi.domain.ShopDetail;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class InMemoryShopRepositoryImpl implements ShopRepository {
@@ -21,13 +22,12 @@ public class InMemoryShopRepositoryImpl implements ShopRepository {
     }
 
     @Override
-    public ShopDetail findNearestToLongitudeAndLatitude(Double longitude, Double latitude) {
+    public Optional<ShopDetail> findNearestToLongitudeAndLatitude(Double longitude, Double latitude) {
         return shopDetails.stream()
                 .sorted((shopDetail1, shopDetail2)
                             -> Double.compare(shopDetail1.distanceTo(longitude, latitude),
                                                 shopDetail2.distanceTo(longitude, latitude)))
-                .findFirst()
-                .get();
+                .findFirst();
     }
 
 }

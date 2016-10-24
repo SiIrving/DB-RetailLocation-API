@@ -12,6 +12,9 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 import uk.co.sics_ltd.dbretaillocationapi.domain.ShopDetail;
 import uk.co.sics_ltd.dbretaillocationapi.repository.ShopRepository;
+import uk.co.sics_ltd.dbretaillocationapi.service.exception.NoShopFoundException;
+
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
@@ -62,17 +65,29 @@ public class ShopServiceImplTest {
     }
 
     @Test
-    public void postcodeIsValid_findNearestToPostcode_shopRepositoryCalledWithLocationOfPostcodeAndResultReturned() {
+    public void locationHasShop_findNearestToLongitudeAndLatitude_shopRepositoryCalledAndResultReturned() {
 
         ShopDetail nearestShop = new ShopDetail();
 
         when(postcodeLocationService.locatePostcode(any()))
                 .thenReturn(LOCATION);
         when(shopRepository.findNearestToLongitudeAndLatitude(any(), any()))
-                .thenReturn(nearestShop);
+                .thenReturn(Optional.of(nearestShop));
 
 
         assertEquals(nearestShop, classUnderTest.findNearestToLongitudeAndLatitude(LONGITUDE, LATITUDE));
+
+        verify(shopRepository).findNearestToLongitudeAndLatitude(LONGITUDE, LATITUDE);
+    }
+
+    @Test(expected = NoShopFoundException.class)
+    public void locationDoesNotHaveShop_findNearestToLongitudeAndLatitude_shopRepositoryCalledEmptyResultReturnedAndExceptionThrown() {
+        when(postcodeLocationService.locatePostcode(any()))
+                .thenReturn(LOCATION);
+        when(shopRepository.findNearestToLongitudeAndLatitude(any(), any()))
+                .thenReturn(Optional.empty());
+
+        classUnderTest.findNearestToLongitudeAndLatitude(LONGITUDE, LATITUDE);
 
         verify(shopRepository).findNearestToLongitudeAndLatitude(LONGITUDE, LATITUDE);
     }

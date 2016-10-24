@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uk.co.sics_ltd.dbretaillocationapi.domain.ShopDetail;
 import uk.co.sics_ltd.dbretaillocationapi.service.ShopService;
+import uk.co.sics_ltd.dbretaillocationapi.service.exception.NoShopFoundException;
 import uk.co.sics_ltd.dbretaillocationapi.service.exception.UnknownPostcodeException;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -45,6 +46,14 @@ public class ShopController {
                 "Postcode %s not found", ex.getPostcode()
         ));
         return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NoShopFoundException.class)
+    public ResponseEntity<ErrorResponse> exceptionHandler(NoShopFoundException ex) {
+        ErrorResponse error = new ErrorResponse(String.format(
+                "No shop found"
+        ));
+        return new ResponseEntity<ErrorResponse>(error, HttpStatus.NOT_FOUND);
     }
 
 

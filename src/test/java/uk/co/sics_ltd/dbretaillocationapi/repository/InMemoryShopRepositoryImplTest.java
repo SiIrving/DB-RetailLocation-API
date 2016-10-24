@@ -45,7 +45,9 @@ public class InMemoryShopRepositoryImplTest {
     @Test
     public void testFindClosestToLocation() {
 
-        ShopDetail closestShop = classUnderTest.findNearestToLongitudeAndLatitude(-1.4635271, 53.3815505);
+        ShopDetail closestShop = classUnderTest
+                .findNearestToLongitudeAndLatitude(-1.4635271, 53.3815505)
+                .get();
 
         assertEquals(CLOSEST_SHOP.getShopName(), closestShop.getShopName());
         assertEquals(CLOSEST_SHOP.getShopAddress().getNumber(), closestShop.getShopAddress().getNumber());
